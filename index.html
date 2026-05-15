@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoInterior 2026 团队任务看板</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+    :root {
+      /* 现代高级色彩系统 */
+      --primary: #0f172a;       /* 深沉暗蓝 */
+      --primary-light: #1e293b;
+      --secondary: #3b82f6;     /* 亮眼主蓝 */
+      --secondary-hover: #2563eb;
+      --secondary-light: #eff6ff;
+      --success: #10b981;       /* 翡翠绿 */
+      --success-light: #ecfdf5;
+      --warning: #f59e0b;       /* 琥珀橙 */
+      --warning-light: #fffbeb;
+      --danger: #ef4444;        /* 玫瑰红 */
+      --danger-light: #fef2f2;
+      --surface: #ffffff;
+      --bg: #f8fafc;            /* 极浅灰蓝背景 */
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --text-light: #94a3b8;
+      
+      /* 圆角系统 */
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      
+      /* 柔和阴影系统 */
+      --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-sm: 0 2px 4px rgba(15, 23, 42, 0.04), 0 1px 2px rgba(15, 23, 42, 0.02);
+      --shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.06), 0 2px 4px -2px rgba(15, 23, 42, 0.02);
+      --shadow-md: 0 12px 20px -6px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 优雅的全局滚动条 */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 24px;
+      font-size: 14px;
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+
+    /* ── Header (顶部导航头) ── */
+    header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 24px 32px;
+      border-radius: var(--radius-xl);
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* 增加光泽装饰 */
+    header::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent 50%);
+      pointer-events: none;
+    }
+
+    h1 {
+      font-size: 1.6em;
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+    }
+
+    header > div {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Buttons (按钮) ── */
+    .btn {
+      padding: 8px 18px;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.9em;
+      font-weight: 600;
+      font-family: inherit;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:hover { 
+      transform: translateY(-2px); 
+    }
+    .btn:active { 
+      transform: translateY(0); 
+    }
+
+    .btn-primary { background: var(--secondary); color: white; box-shadow: 0 4px 12px rgba(59,130,246,0.3); }
+    .btn-primary:hover { background: var(--secondary-hover); }
+    
+    .btn-success { background: var(--surface); color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn-success:hover { background: var(--bg); }
+    
+    .btn-danger  { background: var(--danger);  color: white; box-shadow: 0 4px 12px rgba(239,68,68,0.25); }
+    .btn-danger:hover { background: #dc2626; }
+
+    .btn-outline {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+    .btn-outline:hover { 
+      border-color: var(--secondary); 
+      color: var(--secondary); 
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-sm { padding: 6px 12px; font-size: 0.8em; }
+
+    /* ── Summary cards (数据卡片) ── */
+    .summary-card {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover { 
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md); 
+    }
+
+    /* 卡片左侧彩色指示条 */
+    .card:nth-child(1)::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--text-muted); }
+    .card:nth-child(2)::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--secondary); }
+    .card:nth-child(3)::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--success); }
+    .card:nth-child(4)::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--danger); }
+
+    .card-value {
+      font-size: 2.4em;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .card-label {
+      color: var(--text-muted);
+      font-size: 0.9em;
+      font-weight: 500;
+      margin-top: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Controls / Filters (控制区) ── */
+    .controls {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      background: var(--surface);
+      padding: 16px 24px;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .filter-group label {
+      font-size: 0.85em;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+      margin-bottom: 0;
+    }
+
+    select, input[type="text"], input[type="date"], textarea {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.9em;
+      font-family: inherit;
+      color: var(--text);
+      background: #f8fafc;
+      transition: all 0.2s;
+      outline: none;
+      width: 100%;
+    }
+    .filter-group select, .filter-group input {
+      width: auto;
+      min-width: 160px;
+    }
+    select:hover, input[type="text"]:hover, input[type="date"]:hover, textarea:hover {
+      background: var(--surface);
+      border-color: #cbd5e1;
+    }
+    select:focus, input[type="text"]:focus, input[type="date"]:focus, textarea:focus {
+      background: var(--surface);
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    /* ── Gantt (甘特图) ── */
+    .gantt-container {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-md);
+      padding: 0;
+      overflow-x: auto;
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .gantt-container h2 {
+      font-size: 1.1em;
+      font-weight: 700;
+      color: var(--primary);
+      padding: 20px 24px;
+      margin: 0;
+      border-bottom: 1px solid var(--border);
+      background: #f8fafc;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .gantt-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: max-content;
+      width: 100%;
+    }
+
+    .gantt-table th, .gantt-table td {
+      border-right: 1px dashed var(--border-light);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .gantt-table th:last-child, .gantt-table td:last-child { border-right: none; }
+    .gantt-table tr:last-child td { border-bottom: none; }
+
+    .gantt-label-cell {
+      width: 180px;
+      min-width: 180px;
+      padding: 12px 20px;
+      background: #f1f5f9;
+      font-size: 0.8em;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      border-right: 1px solid var(--border) !important;
+      border-bottom: 1px solid var(--border) !important;
+    }
+
+    .gantt-week {
+      width: 45px;
+      min-width: 45px;
+      text-align: center;
+      font-size: 0.75em;
+      padding: 12px 4px;
+      background: #f8fafc;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border) !important;
+    }
+
+    .gantt-member-cell {
+      width: 180px;
+      min-width: 180px;
+      padding: 14px 20px;
+      background: var(--surface);
+      position: sticky;
+      left: 0;
+      z-index: 5;
+      border-right: 1px solid var(--border) !important;
+    }
+
+    /* 让冻结列悬浮时有轻微的阴影区分 */
+    .gantt-container::before {
+      content: '';
+      position: absolute;
+      top: 60px; left: 180px; bottom: 0; width: 6px;
+      background: linear-gradient(to right, rgba(0,0,0,0.03), transparent);
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .gantt-member-cell .member-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .gantt-member-avatar {
+      font-size: 1.5em;
+      line-height: 1;
+      flex-shrink: 0;
+      background: var(--bg);
+      padding: 6px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+    }
+
+    .gantt-member-name {
+      font-size: 0.9em;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .gantt-row-timeline {
+      position: relative;
+      height: 60px;
+      padding: 0;
+      min-width: 0;
+      background: repeating-linear-gradient(90deg, transparent, transparent 44px, var(--border-light) 44px, var(--border-light) 45px);
+    }
+
+    .gantt-task {
+      position: absolute;
+      height: 32px;
+      top: 14px;
+      background: linear-gradient(90deg, var(--secondary), #60a5fa);
+      border-radius: 6px;
+      color: white;
+      font-size: 0.75em;
+      font-weight: 600;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .gantt-task:hover { 
+      transform: translateY(-2px); 
+      filter: brightness(1.1); 
+      box-shadow: 0 4px 12px rgba(59,130,246,0.4); 
+      z-index: 2;
+    }
+
+    .gantt-task.completed { background: linear-gradient(90deg, var(--success), #34d399); box-shadow: 0 2px 8px rgba(16,185,129,0.3); }
+    .gantt-task.completed:hover { box-shadow: 0 4px 12px rgba(16,185,129,0.4); }
+    .gantt-task.delayed { background: linear-gradient(90deg, var(--danger), #fb7185); box-shadow: 0 2px 8px rgba(239,68,68,0.3); }
+    .gantt-task.delayed:hover { box-shadow: 0 4px 12px rgba(239,68,68,0.4); }
+    
+    .gantt-task.highlight { 
+      box-shadow: 0 0 0 4px var(--warning-light), 0 0 0 6px var(--warning); 
+      animation: pulse 1.5s ease; 
+    }
+    @keyframes pulse { 0%,100%{ opacity:1; transform:scale(1) } 50%{ opacity:0.8; transform:scale(1.02) } }
+
+    /* ── Team grid (成员任务流) ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .team-member {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .team-member:hover { 
+      box-shadow: var(--shadow-md); 
+      border-color: #cbd5e1;
+    }
+
+    .member-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .member-name {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .member-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tasks-container {
+      flex: 1;
+      max-height: 320px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+      padding-right: 4px;
+    }
+
+    /* ── Task items (单个任务卡片) ── */
+    .task-item {
+      background: var(--bg);
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--secondary);
+      position: relative;
+      transition: all 0.2s;
+    }
+    .task-item:hover { 
+      background: #f1f5f9;
+      transform: translateX(2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .task-item.completed { border-left-color: var(--success); }
+    .task-item.delayed   { border-left-color: var(--danger); }
+
+    .task-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 0.95em;
+      color: var(--primary);
+    }
+
+    .task-desc {
+      color: var(--text-muted);
+      font-size: 0.85em;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .task-date {
+      font-size: 0.8em;
+      font-weight: 500;
+      color: var(--text-light);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .task-date::before { content: '⏱'; font-size: 1.1em; }
+
+    .task-progress {
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .task-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), #60a5fa);
+      border-radius: 99px;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .task-status {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75em;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .status-planned    { background: #e2e8f0; color: var(--text-muted); }
+    .status-inprogress { background: var(--secondary-light); color: var(--secondary-hover); }
+    .status-completed  { background: var(--success-light); color: var(--success); }
+    .status-delayed    { background: var(--danger-light); color: var(--danger); }
+
+    .task-timeline-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8em;
+      font-weight: 600;
+      color: var(--secondary);
+      cursor: pointer;
+      margin-top: 8px;
+      float: right;
+      text-decoration: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .task-timeline-link:hover { 
+      background: var(--secondary-light);
+    }
+
+    /* ── Project group (项目分组标题) ── */
+    .project-group { margin-bottom: 16px; }
+    .project-label {
+      font-size: 0.85em;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ── Modals (精致弹窗) ── */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(15,23,42,0.6);
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-content {
+      background: var(--surface);
+      margin: 5% auto;
+      padding: 32px;
+      width: 90%;
+      max-width: 520px;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255,255,255,0.2);
+      transform: translateY(0);
+      animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .modal-content h2 {
+      font-size: 1.4em;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .close {
+      color: var(--text-light);
+      float: right;
+      font-size: 28px;
+      font-weight: 400;
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+      margin-top: -4px;
+    }
+    .close:hover { color: var(--danger); }
+
+    .form-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.9em;
+      color: var(--text);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      padding: 0;
+      background: transparent;
+      accent-color: var(--secondary);
+      height: 6px;
+    }
+    
+    #progress-value {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    /* ── Project/member list (管理列表) ── */
+    .project-list, .member-list { max-height: 300px; overflow-y: auto; margin-top: 16px; }
+
+    .project-list-item, .member-list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .project-list-item:hover, .member-list-item:hover { 
+      border-color: var(--secondary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .project-list-item .project-name { font-weight: 600; font-size: 0.95em; flex: 1; color: var(--text); }
+    .project-list-item .project-task-count { font-size: 0.85em; font-weight: 500; color: var(--text-muted); margin-right: 16px; background: var(--bg); padding: 4px 8px; border-radius: 6px;}
+    .project-list-item .project-actions { display: flex; gap: 8px; }
+    .project-list-item .project-icon { font-size: 1.4em; cursor: pointer; margin-right: 12px; background: var(--bg); padding: 6px; border-radius: 8px;}
+    .member-list-item .member-icon { font-size: 1.4em; cursor: pointer; margin-right: 12px; background: var(--bg); padding: 6px; border-radius: 8px;}
+
+    .icon-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+    .icon-picker span { font-size: 1.4em; cursor: pointer; padding: 8px; border-radius: var(--radius-sm); border: 1px solid transparent; transition: all 0.2s; }
+    .icon-picker span:hover { background: var(--bg); border-color: var(--border); transform: scale(1.1); }
+    .icon-picker span.selected { background: var(--secondary-light); border-color: var(--secondary); box-shadow: 0 0 0 2px rgba(59,130,246,0.2); }
+
+    .manage-hint { color: var(--text-muted); font-size: 0.85em; margin-bottom: 16px; background: var(--bg); padding: 10px 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--secondary); }
+
+    /* ── Export button ── */
+    .export-btn {
+      background: #6366f1; /* 靛蓝色 */
+      color: white;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    }
+    .export-btn:hover {
+      background: #4f46e5;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .controls { flex-direction: column; align-items: stretch; }
+      .gantt-week { min-width: 35px; font-size: 0.7em; }
+      .gantt-label-cell, .gantt-member-cell { width: 120px; min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🚗 AutoInterior 2026 团队任务看板</h1>
+    <div>
+      <button class="btn btn-outline" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.2)" id="manage-member-btn">👥 成员管理</button>
+      <button class="btn btn-outline" style="background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.2)" id="manage-project-btn">📁 项目管理</button>
+      <button class="btn btn-success" id="add-task-btn">➕ 添加任务</button>
+      <button class="btn export-btn" id="export-btn">📊 导出报告</button>
+    </div>
+  </header>
+
+  <div class="summary-card">
+    <div class="card">
+      <div class="card-value" id="total-tasks">0</div>
+      <div class="card-label">总任务数</div>
+    </div>
+    <div class="card">
+      <div class="card-value" id="in-progress">0</div>
+      <div class="card-label">进行中</div>
+    </div>
+    <div class="card">
+      <div class="card-value" id="completed">0</div>
+      <div class="card-label">已完成</div>
+    </div>
+    <div class="card">
+      <div class="card-value" id="delayed">0</div>
+      <div class="card-label">已延期</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-group">
+      <label for="filter-member">筛选成员：</label>
+      <select id="filter-member">
+        <option value="all">全部成员</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-project">筛选项目：</label>
+      <select id="filter-project">
+        <option value="all">全部项目</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="filter-status">筛选状态：</label>
+      <select id="filter-status">
+        <option value="all">全部状态</option>
+        <option value="planned">待办</option>
+        <option value="inprogress">进行中</option>
+        <option value="completed">已完成</option>
+        <option value="delayed">已延期</option>
+      </select>
+    </div>
+    <div class="filter-group" style="flex:1; justify-content: flex-end;">
+      <input type="text" id="search-task" placeholder="🔍 输入关键词搜索任务..." style="max-width: 300px;">
+    </div>
+  </div>
+
+  <div class="gantt-container" id="gantt-container">
+    <h2>📅 2026 全年开发时间线</h2>
+    <table class="gantt-table" id="gantt-table">
+      <thead>
+        <tr id="gantt-header-row">
+          </tr>
+      </thead>
+      <tbody id="gantt-body">
+        </tbody>
+    </table>
+  </div>
+
+  <div class="team-grid" id="team-grid">
+    </div>
+
+  <div id="manage-project-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-manage-project-modal">&times;</span>
+      <h2>📁 项目管理</h2>
+      <p class="manage-hint">提示：可编辑、删除项目或更换图标。删除后该项目的任务将归入「未分类」。</p>
+      <div id="project-list" class="project-list"></div>
+      <div style="margin-top:24px; padding-top:24px; border-top:1px solid var(--border)">
+        <h3 style="margin-bottom:16px; font-size:1.1em; color:var(--primary)">添加新项目</h3>
+        <div class="form-group">
+          <label>选择图标</label>
+          <div id="new-project-icon-picker" class="icon-picker"></div>
+        </div>
+        <div class="form-group">
+          <label for="new-project-name">项目名称</label>
+          <input type="text" id="new-project-name" placeholder="如：C车型内饰开发">
+        </div>
+        <button class="btn btn-primary" style="width:100%" id="save-project-btn">保存新项目</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manage-member-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-manage-member-modal">&times;</span>
+      <h2>👥 成员管理</h2>
+      <p class="manage-hint">提示：管理团队成员，可编辑姓名或选择专属形象图标。</p>
+      <div id="member-list" class="member-list"></div>
+      <div style="margin-top:24px; padding-top:24px; border-top:1px solid var(--border)">
+        <h3 style="margin-bottom:16px; font-size:1.1em; color:var(--primary)">添加新成员</h3>
+        <div class="form-group">
+          <label>选择图标</label>
+          <div id="new-member-icon-picker" class="icon-picker"></div>
+        </div>
+        <div class="form-group">
+          <label for="new-member-name">成员姓名</label>
+          <input type="text" id="new-member-name" placeholder="如：张伟 - 内饰设计">
+        </div>
+        <button class="btn btn-primary" style="width:100%" id="save-member-btn">保存新成员</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="add-task-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-task-modal">&times;</span>
+      <h2>➕ 添加新任务</h2>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="task-member">所属成员</label>
+          <select id="task-member"></select>
+        </div>
+        <div class="form-group">
+          <label for="task-project">所属项目</label>
+          <select id="task-project"></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="task-title">任务标题</label>
+        <input type="text" id="task-title" placeholder="如：仪表盘3D数模冻结">
+      </div>
+      <div class="form-group">
+        <label for="task-desc">任务描述（选填）</label>
+        <textarea id="task-desc" rows="3" placeholder="添加详细的工作要求或说明..."></textarea>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label for="task-start">开始日期</label>
+          <input type="date" id="task-start">
+        </div>
+        <div class="form-group">
+          <label for="task-end">结束日期</label>
+          <input type="date" id="task-end">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="task-progress">当前进度：<span id="progress-value">0%</span></label>
+        <input type="range" id="task-progress" min="0" max="100" value="0">
+      </div>
+      <div class="form-group">
+        <label for="task-status">任务状态</label>
+        <select id="task-status">
+          <option value="planned">待办 (Planned)</option>
+          <option value="inprogress">进行中 (In Progress)</option>
+          <option value="completed">已完成 (Completed)</option>
+          <option value="delayed">已延期 (Delayed)</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%; padding: 12px; font-size: 1.05em;" id="save-task-btn">确认保存任务</button>
+    </div>
+  </div>
+
+  <script>
+    // 图标选项
+    const MEMBER_ICONS = ['👤','👥','👨‍💼','👩‍💼','🧑‍🔧','👷','👨‍💻','👩‍💻','🔧','⚙️','📋','🎯'];
+    const PROJECT_ICONS = ['📁','📂','📋','🚗','🎯','📦','🔨','🏢','📊','⭐','🔩','📐'];
+
+    // 初始化数据
+    let teamData = JSON.parse(localStorage.getItem('autoInterior2026')) || {
+      members: [
+        { id: 1, name: '张伟 - 内饰设计', icon: '👤' },
+        { id: 2, name: '李敏 - 材料工程', icon: '👩‍💼' },
+        { id: 3, name: '王磊 - 人机工程', icon: '🧑‍🔧' },
+        { id: 4, name: '赵婷 - 系统集成', icon: '👷' },
+        { id: 5, name: '陈浩 - 制造工艺', icon: '🔧' },
+        { id: 6, name: '周悦 - 质量控制', icon: '⚙️' }
+      ],
+      projects: [
+        { id: 1, name: 'A车型内饰', icon: '🚗' },
+        { id: 2, name: 'B车型内饰', icon: '📁' },
+        { id: 3, name: '通用件开发', icon: '📦' }
+      ],
+      tasks: []
+    };
+
+    // 兼容旧数据
+    if (!teamData.projects) teamData.projects = [
+      { id: 1, name: 'A车型内饰', icon: '🚗' },
+      { id: 2, name: 'B车型内饰', icon: '📁' },
+      { id: 3, name: '通用件开发', icon: '📦' }
+    ];
+    teamData.members.forEach(m => { if (!m.icon) m.icon = MEMBER_ICONS[0]; });
+    teamData.projects.forEach(p => { if (!p.icon) p.icon = PROJECT_ICONS[0]; });
+
+    // 初始化日期范围：2026年
+    const startYear = 2026;
+    const startDate = new Date(startYear, 0, 1); // 2026-01-01
+    const endDate = new Date(startYear, 11, 31);  // 2026-12-31
+    const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    const weeks = Math.ceil(totalDays / 7);
+
+    // 生成甘特图表头
+    function generateGanttHeader() {
+      const headerRow = document.getElementById('gantt-header-row');
+      headerRow.innerHTML = '';
+
+      const labelCell = document.createElement('th');
+      labelCell.className = 'gantt-label-cell';
+      labelCell.textContent = '团队成员';
+      headerRow.appendChild(labelCell);
+
+      for (let i = 0; i < weeks; i++) {
+        const weekStart = new Date(startDate);
+        weekStart.setDate(startDate.getDate() + i * 7);
+        const weekEnd = new Date(weekStart);
+        weekEnd.setDate(weekStart.getDate() + 6);
+        const weekStr = `${weekStart.getMonth() + 1}/${weekStart.getDate()}`;
+        const th = document.createElement('th');
+        th.className = 'gantt-week';
+        th.textContent = weekStr;
+        headerRow.appendChild(th);
+      }
+    }
+
+    // 日期转为周索引
+    function dateToWeekIndex(date) {
+      const diff = date - startDate;
+      const dayIndex = Math.floor(diff / (1000 * 60 * 60 * 24));
+      return Math.floor(dayIndex / 7);
+    }
+
+    // 渲染甘特图（每人一行，左侧头像）
+    function renderGantt() {
+      const tbody = document.getElementById('gantt-body');
+      tbody.innerHTML = '';
+
+      const memberFilter = document.getElementById('filter-member')?.value;
+      const statusFilter = document.getElementById('filter-status')?.value;
+      const projectFilter = document.getElementById('filter-project')?.value;
+      const search = document.getElementById('search-task')?.value?.toLowerCase() || '';
+
+      const membersToShow = (memberFilter && memberFilter !== 'all')
+        ? teamData.members.filter(m => m.id == memberFilter) : teamData.members;
+
+      membersToShow.forEach(member => {
+        const memberTasks = teamData.tasks.filter(task => {
+          if (task.memberId !== member.id) return false;
+          const matchesStatus = !statusFilter || statusFilter === 'all' || task.status === statusFilter;
+          const matchesProject = !projectFilter || projectFilter === 'all' || task.projectId == projectFilter;
+          const matchesSearch = !search || task.title.toLowerCase().includes(search) || (task.desc || '').toLowerCase().includes(search);
+          return matchesStatus && matchesProject && matchesSearch;
+        });
+
+        const tr = document.createElement('tr');
+
+        const memberCell = document.createElement('td');
+        memberCell.className = 'gantt-member-cell';
+        memberCell.innerHTML = `
+          <div class="member-info">
+            <span class="gantt-member-avatar">${member.icon || '👤'}</span>
+            <span class="gantt-member-name">${member.name}</span>
+          </div>
+        `;
+        tr.appendChild(memberCell);
+
+        const timelineCell = document.createElement('td');
+        timelineCell.className = 'gantt-row-timeline';
+        timelineCell.colSpan = weeks;
+        timelineCell.style.minWidth = (weeks * 45) + 'px';
+
+        memberTasks.forEach(task => {
+          const startWeek = dateToWeekIndex(new Date(task.start));
+          const endWeek = dateToWeekIndex(new Date(task.end));
+          const span = endWeek - startWeek + 1;
+          const widthPct = (span / weeks) * 100;
+          const leftPct = (startWeek / weeks) * 100;
+
+          const taskEl = document.createElement('div');
+          taskEl.className = `gantt-task ${task.status}`;
+          taskEl.dataset.taskId = task.id;
+          taskEl.style.width = widthPct + '%';
+          taskEl.style.left = leftPct + '%';
+          const proj = teamData.projects.find(p => p.id === task.projectId);
+          taskEl.title = `${task.title}\n${task.desc || ''}\n${task.start} → ${task.end}\n进度：${task.progress}%\n项目：${proj ? proj.name : '-'}`;
+          taskEl.textContent = task.title.length > 20 ? task.title.substring(0, 17) + '...' : task.title;
+
+          timelineCell.appendChild(taskEl);
+        });
+
+        tr.appendChild(timelineCell);
+        tbody.appendChild(tr);
+      });
+
+      if (membersToShow.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="' + (weeks + 1) + '" style="padding:40px;text-align:center;color:var(--text-muted);font-weight:500;">暂无符合条件的成员或任务数据</td>';
+        tbody.appendChild(tr);
+      }
+    }
+
+    // 跳转到时间线并高亮任务
+    window.scrollToTimeline = function(taskId) {
+      const gantt = document.getElementById('gantt-container');
+      const taskEl = document.querySelector(`.gantt-task[data-task-id="${taskId}"]`);
+      if (gantt && taskEl) {
+        gantt.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelectorAll('.gantt-task.highlight').forEach(el => el.classList.remove('highlight'));
+        taskEl.classList.add('highlight');
+        setTimeout(() => taskEl.classList.remove('highlight'), 2000);
+      }
+    };
+
+    // 渲染成员任务列表（按项目分组）
+    function renderTeamGrid() {
+      const grid = document.getElementById('team-grid');
+      grid.innerHTML = '';
+
+      const memberFilter = document.getElementById('filter-member')?.value;
+      const statusFilter = document.getElementById('filter-status')?.value;
+      const projectFilter = document.getElementById('filter-project')?.value;
+      const search = document.getElementById('search-task')?.value?.toLowerCase() || '';
+
+      const membersToShow = (memberFilter && memberFilter !== 'all')
+        ? teamData.members.filter(m => m.id == memberFilter) : teamData.members;
+
+      membersToShow.forEach(member => {
+        let memberTasks = teamData.tasks.filter(t => t.memberId === member.id);
+        if (statusFilter && statusFilter !== 'all') memberTasks = memberTasks.filter(t => t.status === statusFilter);
+        if (projectFilter && projectFilter !== 'all') memberTasks = memberTasks.filter(t => t.projectId == projectFilter);
+        if (search) memberTasks = memberTasks.filter(t => t.title.toLowerCase().includes(search) || (t.desc || '').toLowerCase().includes(search));
+
+        const byProject = {};
+        memberTasks.forEach(task => {
+          const pid = task.projectId || 0;
+          if (!byProject[pid]) byProject[pid] = [];
+          byProject[pid].push(task);
+        });
+
+        const projectNames = {};
+        teamData.projects.forEach(p => { projectNames[p.id] = p.name; });
+
+        let tasksHtml = '';
+        Object.keys(byProject).sort((a,b)=>+a - +b).forEach(pid => {
+          const proj = pid === '0' ? null : teamData.projects.find(p => p.id == pid);
+          const projIcon = proj ? (proj.icon || '📁') : '📁';
+          const projName = pid === '0' ? '未分类' : (projectNames[pid] || '未知项目');
+          tasksHtml += `<div class="project-group"><div class="project-label">${projIcon} ${projName}</div>`;
+          byProject[pid].forEach(task => {
+            tasksHtml += `
+              <div class="task-item ${task.status === 'completed' ? 'completed' : task.status === 'delayed' ? 'delayed' : ''}">
+                <div class="task-title">${task.title}</div>
+                ${task.desc ? `<div class="task-desc">${task.desc}</div>` : ''}
+                <div class="task-date">${task.start} 至 ${task.end}</div>
+                <div class="task-progress">
+                  <div class="task-progress-bar" style="width: ${task.progress}%"></div>
+                </div>
+                <div>
+                  <span class="task-status status-${task.status}">${task.status === 'planned' ? '待办' : task.status === 'inprogress' ? '进行中' : task.status === 'completed' ? '已完成' : '已延期'}</span>
+                  <a class="task-timeline-link" onclick="scrollToTimeline(${task.id})" title="跳转到时间线">🔗 定位图表</a>
+                </div>
+              </div>
+            `;
+          });
+          tasksHtml += '</div>';
+        });
+
+        const memberIcon = member.icon || '👤';
+        const memberEl = document.createElement('div');
+        memberEl.className = 'team-member';
+        memberEl.innerHTML = `
+          <div class="member-header">
+            <div class="member-name">${memberIcon} ${member.name}</div>
+            <div class="member-actions">
+              <button class="btn btn-outline btn-sm" onclick="editMember(${member.id})">✏️</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">🗑️</button>
+            </div>
+          </div>
+          <div class="tasks-container">
+            ${tasksHtml || '<div class="project-group"><div class="project-label" style="border:none; justify-content:center; padding: 30px 0;">当前暂无任务</div></div>'}
+          </div>
+          <button class="btn btn-outline btn-sm" style="width:100%; border-style:dashed" onclick="addTaskForMember(${member.id})">➕ 添加新任务</button>
+        `;
+        grid.appendChild(memberEl);
+      });
+    }
+
+    // 更新筛选器
+    function updateFilterMembers() {
+      const select = document.getElementById('filter-member');
+      select.innerHTML = '<option value="all">全部成员</option>';
+      teamData.members.forEach(member => {
+        const opt = document.createElement('option');
+        opt.value = member.id;
+        opt.textContent = (member.icon || '👤') + ' ' + member.name;
+        select.appendChild(opt);
+      });
+    }
+
+    function updateFilterProjects() {
+      const select = document.getElementById('filter-project');
+      if (!select) return;
+      select.innerHTML = '<option value="all">全部项目</option>';
+      teamData.projects.forEach(proj => {
+        const opt = document.createElement('option');
+        opt.value = proj.id;
+        opt.textContent = (proj.icon || '📁') + ' ' + proj.name;
+        select.appendChild(opt);
+      });
+    }
+
+    // 渲染图标选择器
+    function renderIconPicker(containerId, icons, selectedIcon, onSelect) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+      icons.forEach(icon => {
+        const span = document.createElement('span');
+        span.textContent = icon;
+        span.title = '点击选择';
+        if (icon === selectedIcon) span.classList.add('selected');
+        span.onclick = () => { onSelect(icon); container.querySelectorAll('span').forEach(s => s.classList.remove('selected')); span.classList.add('selected'); };
+        container.appendChild(span);
+      });
+    }
+
+    // 渲染项目管理列表
+    function renderProjectList() {
+      const list = document.getElementById('project-list');
+      if (!list) return;
+      list.innerHTML = '';
+      teamData.projects.forEach(proj => {
+        const count = teamData.tasks.filter(t => t.projectId === proj.id).length;
+        const icon = proj.icon || PROJECT_ICONS[0];
+        const item = document.createElement('div');
+        item.className = 'project-list-item';
+        item.innerHTML = `
+          <span class="project-icon" onclick="showProjectIconPicker(${proj.id}, event)" title="点击选择图标">${icon}</span>
+          <span class="project-name">${proj.name}</span>
+          <span class="project-task-count">${count} 个任务</span>
+          <div class="project-actions">
+            <button class="btn btn-outline btn-sm" onclick="editProject(${proj.id})">编辑</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteProject(${proj.id})">删除</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+      renderIconPicker('new-project-icon-picker', PROJECT_ICONS, PROJECT_ICONS[0], (icon) => { window._newProjectIcon = icon; });
+      window._newProjectIcon = PROJECT_ICONS[0];
+    }
+
+    window.showProjectIconPicker = function(projectId, evt) {
+      const proj = teamData.projects.find(p => p.id === projectId);
+      if (!proj) return;
+      const picker = document.createElement('div');
+      picker.className = 'icon-picker';
+      picker.style.cssText = 'position:fixed;background:var(--surface);padding:12px;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:1001;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;';
+      PROJECT_ICONS.forEach(icon => {
+        const span = document.createElement('span');
+        span.textContent = icon;
+        span.onclick = () => {
+          proj.icon = icon;
+          saveData();
+          renderProjectList();
+          renderTeamGrid();
+          updateFilterProjects();
+          document.body.removeChild(picker);
+        };
+        picker.appendChild(span);
+      });
+      document.body.appendChild(picker);
+      const rect = (evt || event).target.getBoundingClientRect();
+      picker.style.left = rect.left + 'px';
+      picker.style.top = (rect.bottom + 8) + 'px';
+      setTimeout(() => document.addEventListener('click', function closePicker(e) {
+        if (!picker.contains(e.target) && e.target !== (evt || event).target) {
+          if (picker.parentNode) document.body.removeChild(picker);
+          document.removeEventListener('click', closePicker);
+        }
+      }), 0);
+    };
+
+    // 渲染成员管理列表
+    function renderMemberList() {
+      const list = document.getElementById('member-list');
+      if (!list) return;
+      list.innerHTML = '';
+      teamData.members.forEach(member => {
+        const count = teamData.tasks.filter(t => t.memberId === member.id).length;
+        const icon = member.icon || MEMBER_ICONS[0];
+        const item = document.createElement('div');
+        item.className = 'member-list-item';
+        item.innerHTML = `
+          <span class="member-icon" onclick="showMemberIconPicker(${member.id}, event)" title="点击选择图标">${icon}</span>
+          <span class="project-name">${member.name}</span>
+          <span class="project-task-count">${count} 个任务</span>
+          <div class="project-actions">
+            <button class="btn btn-outline btn-sm" onclick="editMember(${member.id})">编辑</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteMember(${member.id})">删除</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+      renderIconPicker('new-member-icon-picker', MEMBER_ICONS, MEMBER_ICONS[0], (icon) => { window._newMemberIcon = icon; });
+      window._newMemberIcon = MEMBER_ICONS[0];
+    }
+
+    window.showMemberIconPicker = function(memberId, evt) {
+      const member = teamData.members.find(m => m.id === memberId);
+      if (!member) return;
+      const picker = document.createElement('div');
+      picker.className = 'icon-picker';
+      picker.style.cssText = 'position:fixed;background:var(--surface);padding:12px;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);z-index:1001;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;';
+      MEMBER_ICONS.forEach(icon => {
+        const span = document.createElement('span');
+        span.textContent = icon;
+        span.onclick = () => {
+          member.icon = icon;
+          saveData();
+          renderMemberList();
+          renderTeamGrid();
+          updateFilterMembers();
+          document.body.removeChild(picker);
+        };
+        picker.appendChild(span);
+      });
+      document.body.appendChild(picker);
+      const rect = (evt || event).target.getBoundingClientRect();
+      picker.style.left = rect.left + 'px';
+      picker.style.top = (rect.bottom + 8) + 'px';
+      setTimeout(() => document.addEventListener('click', function closePicker(e) {
+        if (!picker.contains(e.target) && e.target !== (evt || event).target) {
+          if (picker.parentNode) document.body.removeChild(picker);
+          document.removeEventListener('click', closePicker);
+        }
+      }), 0);
+    };
+
+    window.deleteProject = function(id) {
+      const proj = teamData.projects.find(p => p.id === id);
+      if (!proj) return;
+      if (!confirm(`确定要删除项目「${proj.name}」吗？该项目的任务将归入「未分类」。`)) return;
+      teamData.projects = teamData.projects.filter(p => p.id !== id);
+      teamData.tasks.forEach(t => { if (t.projectId === id) t.projectId = 0; });
+      saveData();
+      updateFilterProjects();
+      renderProjectList();
+      renderGantt();
+      renderTeamGrid();
+    };
+
+    window.editProject = function(id) {
+      const proj = teamData.projects.find(p => p.id === id);
+      if (!proj) return;
+      const newName = prompt('修改项目名称', proj.name);
+      if (newName !== null && newName.trim() !== '') {
+        proj.name = newName.trim();
+        saveData();
+        updateFilterProjects();
+        renderProjectList();
+        renderTeamGrid();
+        updateSummary();
+      }
+    };
+
+    // 过滤和搜索
+    function filterTasks() {
+      renderGantt();
+      renderTeamGrid();
+      updateSummary();
+    }
+
+    // 更新统计数据
+    function updateSummary() {
+      const total = teamData.tasks.length;
+      const inProgress = teamData.tasks.filter(t => t.status === 'inprogress').length;
+      const completed = teamData.tasks.filter(t => t.status === 'completed').length;
+      const delayed = teamData.tasks.filter(t => t.status === 'delayed').length;
+
+      document.getElementById('total-tasks').textContent = total;
+      document.getElementById('in-progress').textContent = inProgress;
+      document.getElementById('completed').textContent = completed;
+      document.getElementById('delayed').textContent = delayed;
+    }
+
+    // 导出报告为 CSV
+    function exportReport() {
+      const headers = ['成员', '项目', '任务标题', '描述', '开始', '结束', '进度', '状态'];
+      const rows = teamData.tasks.map(task => {
+        const member = teamData.members.find(m => m.id === task.memberId)?.name || '未知';
+        const project = teamData.projects.find(p => p.id === task.projectId)?.name || '未分类';
+        return [
+          `"${member}"`,
+          `"${project}"`,
+          `"${task.title}"`,
+          `"${task.desc || ''}"`,
+          task.start,
+          task.end,
+          task.progress,
+          task.status
+        ].join(',');
+      });
+
+      const csvContent = [headers.join(','), ...rows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', `AutoInterior_2026_Report_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // 事件监听器
+    document.addEventListener('DOMContentLoaded', () => {
+      generateGanttHeader();
+      updateFilterMembers();
+      updateFilterProjects();
+      renderGantt();
+      renderTeamGrid();
+      updateSummary();
+
+      // 模态框关闭按钮
+      document.getElementById('close-manage-member-modal').addEventListener('click', () => {
+        document.getElementById('manage-member-modal').style.display = 'none';
+      });
+      document.getElementById('close-manage-project-modal').addEventListener('click', () => {
+        document.getElementById('manage-project-modal').style.display = 'none';
+      });
+      document.getElementById('close-task-modal').addEventListener('click', () => {
+        document.getElementById('add-task-modal').style.display = 'none';
+      });
+
+      // 打开模态框
+      document.getElementById('manage-member-btn').addEventListener('click', () => {
+        renderMemberList();
+        document.getElementById('manage-member-modal').style.display = 'block';
+      });
+
+      document.getElementById('manage-project-btn').addEventListener('click', () => {
+        renderProjectList();
+        document.getElementById('manage-project-modal').style.display = 'block';
+      });
+
+      document.getElementById('add-task-btn').addEventListener('click', () => {
+        // 初始化任务表单
+        const memberSelect = document.getElementById('task-member');
+        memberSelect.innerHTML = '';
+        teamData.members.forEach(member => {
+          const opt = document.createElement('option');
+          opt.value = member.id;
+          opt.textContent = (member.icon || '👤') + ' ' + member.name;
+          memberSelect.appendChild(opt);
+        });
+
+        const projectSelect = document.getElementById('task-project');
+        projectSelect.innerHTML = '';
+        teamData.projects.forEach(proj => {
+          const opt = document.createElement('option');
+          opt.value = proj.id;
+          opt.textContent = (proj.icon || '📁') + ' ' + proj.name;
+          projectSelect.appendChild(opt);
+        });
+
+        document.getElementById('task-start').valueAsDate = new Date();
+        document.getElementById('task-end').valueAsDate = new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000);
+        document.getElementById('task-progress').value = 0;
+        document.getElementById('progress-value').textContent = '0%';
+        document.getElementById('add-task-modal').style.display = 'block';
+      });
+
+      // 保存成员
+      document.getElementById('save-member-btn').addEventListener('click', () => {
+        const name = document.getElementById('new-member-name').value.trim();
+        if (!name) return alert('请输入成员姓名');
+        teamData.members.push({
+          id: Date.now(),
+          name: name,
+          icon: window._newMemberIcon || MEMBER_ICONS[0]
+        });
+        saveData();
+        updateFilterMembers();
+        renderMemberList();
+        renderTeamGrid();
+        document.getElementById('new-member-name').value = '';
+      });
+
+      // 保存项目
+      document.getElementById('save-project-btn').addEventListener('click', () => {
+        const name = document.getElementById('new-project-name').value.trim();
+        if (!name) return alert('请输入项目名称');
+        teamData.projects.push({
+          id: Date.now(),
+          name: name,
+          icon: window._newProjectIcon || PROJECT_ICONS[0]
+        });
+        saveData();
+        updateFilterProjects();
+        renderProjectList();
+        renderTeamGrid();
+        document.getElementById('new-project-name').value = '';
+      });
+
+      // 保存任务
+      document.getElementById('save-task-btn').addEventListener('click', () => {
+        const memberId = parseInt(document.getElementById('task-member').value);
+        const projectId = parseInt(document.getElementById('task-project').value) || teamData.projects[0]?.id;
+        const title = document.getElementById('task-title').value.trim();
+        const desc = document.getElementById('task-desc').value.trim();
+        const start = document.getElementById('task-start').value;
+        const end = document.getElementById('task-end').value;
+        const progress = parseInt(document.getElementById('task-progress').value);
+        const status = document.getElementById('task-status').value;
+
+        if (!title || !start || !end) return alert('请填写必要字段');
+
+        if (new Date(start) > new Date(end)) return alert('开始日期不能晚于结束日期');
+
+        teamData.tasks.push({
+          id: Date.now(),
+          memberId,
+          projectId,
+          title,
+          desc,
+          start,
+          end,
+          progress,
+          status
+        });
+
+        saveData();
+        renderGantt();
+        renderTeamGrid();
+        updateSummary();
+        document.getElementById('add-task-modal').style.display = 'none';
+
+        // 清空表单
+        document.getElementById('task-title').value = '';
+        document.getElementById('task-desc').value = '';
+        document.getElementById('task-progress').value = 0;
+        document.getElementById('progress-value').textContent = '0%';
+      });
+
+      // 进度滑块实时更新
+      document.getElementById('task-progress').addEventListener('input', () => {
+        document.getElementById('progress-value').textContent = document.getElementById('task-progress').value + '%';
+      });
+
+      // 筛选与搜索
+      document.getElementById('filter-member').addEventListener('change', filterTasks);
+      document.getElementById('filter-project').addEventListener('change', filterTasks);
+      document.getElementById('filter-status').addEventListener('change', filterTasks);
+      document.getElementById('search-task').addEventListener('input', filterTasks);
+
+      // 导出
+      document.getElementById('export-btn').addEventListener('click', exportReport);
+
+      // 点击外部关闭模态框
+      window.addEventListener('click', (e) => {
+        const manageMemberModal = document.getElementById('manage-member-modal');
+        const manageProjectModal = document.getElementById('manage-project-modal');
+        const taskModal = document.getElementById('add-task-modal');
+        if (e.target === manageMemberModal) manageMemberModal.style.display = 'none';
+        if (e.target === manageProjectModal) manageProjectModal.style.display = 'none';
+        if (e.target === taskModal) taskModal.style.display = 'none';
+      });
+    });
+
+    // 保存数据到 localStorage
+    function saveData() {
+      localStorage.setItem('autoInterior2026', JSON.stringify(teamData));
+    }
+
+    // 成员编辑函数
+    window.editMember = function(id) {
+      const member = teamData.members.find(m => m.id === id);
+      const newName = prompt('修改成员姓名', member.name);
+      if (newName !== null && newName.trim() !== '') {
+        member.name = newName.trim();
+        saveData();
+        updateFilterMembers();
+        renderMemberList();
+        renderTeamGrid();
+      }
+    };
+
+    // 删除成员（确认后删除其所有任务）
+    window.deleteMember = function(id) {
+      if (!confirm('确定要删除该成员及其所有任务吗？此操作不可撤销。')) return;
+      teamData.members = teamData.members.filter(m => m.id !== id);
+      teamData.tasks = teamData.tasks.filter(t => t.memberId !== id);
+      saveData();
+      renderMemberList();
+      updateFilterMembers();
+      renderTeamGrid();
+      renderGantt();
+      updateSummary();
+    };
+
+    // 为指定成员添加任务
+    window.addTaskForMember = function(memberId) {
+      const memberSelect = document.getElementById('task-member');
+      memberSelect.innerHTML = '';
+      teamData.members.forEach(member => {
+        const opt = document.createElement('option');
+        opt.value = member.id;
+        opt.textContent = (member.icon || '👤') + ' ' + member.name;
+        memberSelect.appendChild(opt);
+      });
+      memberSelect.value = memberId;
+
+      const projectSelect = document.getElementById('task-project');
+      projectSelect.innerHTML = '';
+      teamData.projects.forEach(proj => {
+        const opt = document.createElement('option');
+        opt.value = proj.id;
+        opt.textContent = (proj.icon || '📁') + ' ' + proj.name;
+        projectSelect.appendChild(opt);
+      });
+
+      document.getElementById('task-title').value = '';
+      document.getElementById('task-desc').value = '';
+      const today = new Date().toISOString().slice(0,10);
+      const nextWeek = new Date(Date.now() + 7*24*60*60*1000).toISOString().slice(0,10);
+      document.getElementById('task-start').value = today;
+      document.getElementById('task-end').value = nextWeek;
+      document.getElementById('task-progress').value = 0;
+      document.getElementById('progress-value').textContent = '0%';
+      document.getElementById('add-task-modal').style.display = 'block';
+    };
+  </script>
+
+</body>
+</html>
